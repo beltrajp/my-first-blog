@@ -1,0 +1,40 @@
+pc = SYS(5)+SYS(2003)
+DO LOCFILE("FoxyPreviewer.App")
+
+WITH _Screen.oFoxyPreviewer
+	.lEmailAuto     = .T.   && Automatically generates the report output file
+	.cEmailType     = "PDF" && The file type to be used in Emails (PDF, RTF, HTML or XLS)
+	.nEmailMode     = 2     && 1 = MAPI, 2 = CDOSYS HTML, 3 = CDOSYS TEXT, 4 = Custom procedure
+
+	.cEmailTo= 'cor...@destinatario.com'
+	.cSMTPServer = "smtp.gmail.com"
+	.cEmailFrom= 'mico...@gmail.com'
+	.cEmailSubject = "Reporte " && Aqui va el Asunto del correo
+	.cEmailBody= 'Te mando el reporte corregido con todos los meses' && Aqui va el cuerpo del correo
+	.nSMTPPort      = 465
+	.lSMTPUseSSL    = .t.
+	.cSMTPUserName  = mico...@gmail.com'
+	.cSMTPPassword  = 'mipassword'
+
+	.lReadReceipt   = .T.
+	.lPriority      = .T.
+
+	lcDefaultPath = Sys(5)+Sys(2003)
+	.SendEmailUsingCDO(lcDefaultPath +'\reports\deudores.rar')  && aqui pongo los archivos adjuntos
+
+ENDWITH
+
+RETURN
+
+
+IF This.Reporte = 'No Definido'
+	MESSAGEBOX('No se ha definido el Reporte a imprimir',64,'Atención')
+ELSE
+	lDataSession = ThisForm.DataSessionId
+	DO FORM DialogoImpresion WITH lDataSession, This.Titulo, This.Reporte, lcFiltro, lcORden, lcPdfName TO lcReturn
+ENDIF
+
+IF !lcPorMail 
+ELSE
+
+ENDIF	
